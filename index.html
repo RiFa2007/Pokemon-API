@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="fr" data-bs-theme="light">
+
+<head>
+    <title>Pokedex Api</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- CDN jQuery officiel pour éviter le blocage de chargement local -->
+    <script src="jquey.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
+    <!-- Bootstrap CSS v5.3.3 -->
+    <!-- <link href="https://jsdelivr.net" rel="stylesheet" /> -->
+
+    <style>
+        /* Grille CSS ultra-rapide en arrière-plan à la place du Canvas */
+        body {
+            background-color: #1e1e1e;
+            color: aliceblue;
+            background-image:
+                linear-gradient(rgba(255, 0, 0, 0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.15) 1px, transparent 1px);
+            background-size: 30px 30px;
+            /* Lignes espacées pour éviter le lag */
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        /* Centre de l'interface avec effet de transparence moderne */
+        .main-card {
+            background: rgba(33, 37, 41, 0.85);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Rendu net des sprites pixel-art */
+        #image {
+            image-rendering: pixelated;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        $(document).ready(function () {
+            $("#Pokemon").change(function () {
+                let input = $("#Pokemon").val();
+                $.get(`https://pokeapi.co/api/v2/pokemon/${input}`, function (data, status) {
+                    if (status == "success") {
+                        $("#name").text(data.height);
+                        $("#image").attr("src", data.sprites.front_default).css({
+                            display: "block"
+                        });
+                    }
+
+                }).fail(function () {
+                    alert(`${input} n'est pas un pokemon`)
+                });
+            });
+
+            $("#alert").click(function () {
+                let pokemonName = $("#Pokemon").val();
+
+                if (pokemonName !== '') {
+                    $.ajax({
+                        url: "test.php",
+                        type: "POST",
+                        contentType: "application/json", // Pour envoyer du JSON
+                        dataType: "json", // pour que la reponse soit du code JSON
+                        data: JSON.stringify({ name: pokemonName }),//on envoie du json
+                        success: function (data, status) {
+                            alert("Data: " + data.grettings + "\nStatus: " + status);
+                        },
+                        error: function (xhr, status, error) {
+                            alert("Error: " + xhr.status + " - " + error);
+                        }
+                    })
+                }
+            });
+
+        });
+    </script>
+
+    <!-- Header épuré -->
+    <header class="bg-dark bg-opacity-75 border-bottom border-secondary py-3 mb-5">
+        <div class="container text-center">
+            <h1 class="m-0 fs-3 fw-bold text-danger font-monospace">Pokedex Api</h1>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+
+                <!-- Boîtier principal stylisé -->
+                <div class="main-card">
+
+                    <!-- Formulaire -->
+                    <div class="mb-4">
+                        <label for="Pokemon" class="form-label fw-bold text-light text-opacity-75">Entrer le nom d'un
+                            pokemon</label>
+                        <input type="text" id="Pokemon"
+                            class="form-control form-control-lg bg-dark text-light border-secondary"
+                            placeholder="Ex: pikachu...">
+                        <button id="alert" class="btn bg-light text-dack m-2"> Greetings </button>
+                    </div>
+
+                    <!-- Résultats -->
+                    <div class="row align-items-center g-3 border-top border-secondary pt-4 mt-3">
+                        <div class="col-6">
+                            <div class="bg-dark bg-opacity-50 p-3 rounded border border-secondary-subtle">
+                                <div class="text-uppercase small text-light fw-bold mb-1">Taille</div>
+                                <div id="name" class="fs-4 fw-bold text-warning">-</div>
+                            </div>
+                        </div>
+
+                        <div class="col-6 text-center">
+                            <div class="text-uppercase small text-light fw-bold mb-2">Image</div>
+                            <div class="d-flex justify-content-center align-items-center" style="height: 120px;">
+                                <img src="" alt="Pokemon Sprite" id="image"
+                                    style="height: 100px; width: 100px; display: none;">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="py-4 mt-5 text-center text-muted small">
+        <!-- place footer here -->
+    </footer>
+
+    <!-- Bootstrap JavaScript Bundle -->
+    <script src="https://jsdelivr.net"></script>
+</body>
+
+</html>
