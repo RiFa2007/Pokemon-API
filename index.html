@@ -67,26 +67,6 @@
                 });
             });
 
-            $("#alert").click(function () {
-                let pokemonName = $("#Pokemon").val();
-
-                if (pokemonName !== '') {
-                    $.ajax({
-                        url: "test.php",
-                        type: "POST",
-                        contentType: "application/json", // Pour envoyer du JSON
-                        dataType: "json", // pour que la reponse soit du code JSON
-                        data: JSON.stringify({ name: pokemonName }),//on envoie du json
-                        success: function (data, status) {
-                            alert("Data: " + data.grettings + "\nStatus: " + status);
-                        },
-                        error: function (xhr, status, error) {
-                            alert("Error: " + xhr.status + " - " + error);
-                        }
-                    })
-                }
-            });
-
         });
     </script>
 
@@ -111,7 +91,6 @@
                         <input type="text" id="Pokemon"
                             class="form-control form-control-lg bg-dark text-light border-secondary"
                             placeholder="Ex: pikachu...">
-                        <button id="alert" class="btn bg-light text-dack m-2"> Greetings </button>
                     </div>
 
                     <!-- Résultats -->
